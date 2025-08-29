@@ -1,4 +1,8 @@
-module sevenseg_ca (
+// Emmett Stralka estralka@hmc.edu
+// 08/29/25
+// sevensegment display contols and logic
+
+module seven_segment (
     input  logic [3:0] num,     
     output logic [6:0] seg 
 );

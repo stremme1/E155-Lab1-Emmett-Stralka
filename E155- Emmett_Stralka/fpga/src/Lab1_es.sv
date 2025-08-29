@@ -1,3 +1,8 @@
+// Emmett Stralka estralka@hmc.edu
+// 08/29/25
+// Lab1 inits dependencies seven_segment and handles 3 Led operations
+
+
 module Lab1_ES (
     input  logic        clk,    // 12 MHz onboard oscillator (HSOSC)
     input  logic [3:0]  s,      // DIP switches
