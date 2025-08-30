@@ -6,9 +6,9 @@ module Lab1_es_tb();
     logic clk;
     logic [3:0] s;
     logic [6:0] seg, seg_expected;
-    logic [2:0] led, led_expected; // now full 3-bit led
+    logic [2:0] led, led_expected; // full 3-bit led
     logic [31:0] vectornum, errors;
-    logic [11:0] testvectors[1000:0]; // 4 bits input + 2 leds + 7 seg bits
+    logic [11:0] testvectors[1000:0]; // 4-bit input + 2 LEDs + 7 seg bits
 
     // Instantiate DUT
     Lab1_es dut(
@@ -23,17 +23,18 @@ module Lab1_es_tb();
         clk = 1; #5; clk = 0; #5;
     end
 
-    // Load test vectors
+    // Load test vectors at start
     initial begin
-        $readmemb("lab1_es.txt", testvectors);
-        vectornum = 0; errors = 0;
+        $readmemb("lab1_es.txt", testvectors); // test vectors file
+        vectornum = 0;
+        errors = 0;
     end
 
     // Apply test vectors on rising edge
     always @(posedge clk) begin
         #1;
         {s, led_expected[1:0], seg_expected} = testvectors[vectornum];
-        // led[2] (blinking) ignored in vector, can check manually if needed
+        // led[2] (blinking) ignored in vector
     end
 
     // Check outputs on falling edge
