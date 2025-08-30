@@ -6,12 +6,17 @@ module Lab1_es_tb();
     logic clk;
     logic [3:0] s;
     logic [6:0] seg, seg_expected;
-    logic [1:0] led, led_expected; // led[2] blink ignored in vector
+    logic [2:0] led, led_expected; // now full 3-bit led
     logic [31:0] vectornum, errors;
     logic [11:0] testvectors[1000:0]; // 4 bits input + 2 leds + 7 seg bits
 
     // Instantiate DUT
-    Lab1_es dut(.clk(clk), .s(s), .seg(seg), .led({led, /*led[2] ignored*/}));
+    Lab1_es dut(
+        .clk(clk),
+        .s(s),
+        .seg(seg),
+        .led(led)
+    );
 
     // Clock generation
     always begin
@@ -27,13 +32,14 @@ module Lab1_es_tb();
     // Apply test vectors on rising edge
     always @(posedge clk) begin
         #1;
-        {s, led_expected, seg_expected} = testvectors[vectornum];
+        {s, led_expected[1:0], seg_expected} = testvectors[vectornum];
+        // led[2] (blinking) ignored in vector, can check manually if needed
     end
 
     // Check outputs on falling edge
     always @(negedge clk) begin
-        if (led !== led_expected) begin
-            $display("Error: s=%b, led=%b (expected %b)", s, led, led_expected);
+        if (led[1:0] !== led_expected[1:0]) begin
+            $display("Error: s=%b, led=%b (expected %b)", s, led[1:0], led_expected[1:0]);
             errors = errors + 1;
         end
         if (seg !== seg_expected) begin
