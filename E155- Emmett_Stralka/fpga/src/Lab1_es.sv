@@ -1,39 +1,40 @@
 // Emmett Stralka estralka@hmc.edu
 // 08/29/25
-// Lab1 inits dependencies seven_segment and handles 3 Led operations
+// Lab1: Initializes dependencies for seven_segment and handles 3 LED operations
 
+module Lab1_es(
+     input logic reset, 
+	 input logic [3:0]s,
+     output logic [2:0]led, 
+	 output logic [6:0]seg);
 
-module Lab1_es (
-    input  logic        clk,    
-    input  logic [3:0]  s,      
-    output logic [6:0]  seg,    
-    output logic [2:0]  led     
-);
+	seven_segment d(s, seg); // 7 segment display (combinational logic) 
+   
+   //LED assignment:
+	assign led[0] = s[1]^s[0];   //XOR of S1 and S0
+	assign led[1] = s[2] & s[3]; //AND of S3 and S2
+	//LED[2]: Blink at 2.4Hz
+   logic int_osc;
+   logic [23:0] counter; //initializing counter
+  
+   // Internal high-speed oscillator
+   HSOSC #(.CLKHF_DIV(2'b01)) 
+         hf_osc (.CLKHFPU(1'b1), .CLKHFEN(1'b1), .CLKHF(int_osc));
+  
+   // Counter
+   always_ff @(posedge int_osc, negedge reset) begin
+     if(reset == 0) begin
+		 counter <= 0;
+		 led[2] <= 0;
+	 end else begin           
+		 if(counter == 23'd4_999_999)begin  //5M cycles to flip the LED
+			 counter <= 0;
+			 led[2] <= ~led[2]; //flip the LED
+		 end else begin
+			counter <= counter + 1;
+		 end
+		 end
+     end 
 
-    // --- Seven-segment display decoder ---
-    seven_segment d (
-        s,   // connects to num
-        seg  // connects to seg output
-    );
-
-    // --- LEDs based on switch logic ---
-    assign led[0] = s[1] ^ s[0];  // XOR of S1 and S0
-    assign led[1] = s[3] & s[2];  // AND of S3 and S2
-
-    // --- LED[2]: Blink at 2.4 Hz ---
-    localparam int HALF_PERIOD = 2_500_000; // for 12 MHz input clock
-    logic [23:0] divcnt = 0;
-    logic        blink_state = 0;
-
-    always_ff @(posedge clk) begin
-        if (divcnt == HALF_PERIOD - 1) begin
-            divcnt <= 0;
-            blink_state <= ~blink_state; // toggle LED
-        end else begin
-            divcnt <= divcnt + 1;
-        end
-    end
-
-    assign led[2] = blink_state;
-
+  
 endmodule
