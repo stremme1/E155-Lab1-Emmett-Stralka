@@ -19,7 +19,7 @@ module seven_segment_tb();
 
     // Load test vectors
     initial begin
-        $readmemb("seven_segment.tv.txt", testvectors);
+        $readmemb("seven_segment.txt", testvectors);
         vectornum = 0; errors = 0;
     end
 
