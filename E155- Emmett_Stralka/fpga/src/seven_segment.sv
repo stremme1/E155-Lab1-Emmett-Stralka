@@ -18,7 +18,7 @@ module seven_segment (
 // 8 = A,B,C,D,E,F,G
 // 9 = A,B,C,D,F,G
 
-
+// ON is 0
     always_comb begin
         unique case (num)
             4'd0: seg = 7'b1000000; // 0: A,B,C,D,E,F ON; G OFF
