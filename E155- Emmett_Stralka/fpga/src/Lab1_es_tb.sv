@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-module Lab1_tb;
+module Lab1_es_tb;
 
   // DUT inputs
   logic clk;
@@ -59,4 +59,3 @@ module Lab1_tb;
   end
 
 endmodule
-
