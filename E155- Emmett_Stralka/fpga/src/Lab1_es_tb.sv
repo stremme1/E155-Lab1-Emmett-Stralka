@@ -20,7 +20,7 @@ module Lab1_es_tb();
 
     // Load test vectors
     initial begin
-        $readmemb("lab1_es.tv.txt", testvectors);
+        $readmemb("lab1_es.txt", testvectors);
         vectornum = 0; errors = 0;
     end
 
